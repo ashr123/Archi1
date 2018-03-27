@@ -17,6 +17,6 @@ int main()
 //	printf("Hello, World!\n");
 	LinkedList a;
 	
-	scanf("m%s", a.num.digits);
+	scanf("%s", a.num.digits);
 	return 0;
 }
