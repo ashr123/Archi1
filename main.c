@@ -14,7 +14,6 @@ typedef struct Link
 
 int main()
 {
-//	printf("Hello, World!\n");
 	LinkedList a;
 	
 	scanf("%s", a.num.digits);

@@ -1,5 +1,5 @@
 all: clean main.o #add.o
-	gcc -g -Wall -o run main.o #add.o
+	gcc -g -Wall -o calc main.o #add.o
 
 main.o:
 	gcc -g -Wall -c -o main.o main.c
