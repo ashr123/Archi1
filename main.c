@@ -46,11 +46,10 @@ void clear(LinkedList *stackHead)
 
 int main()
 {
-	LinkedList *stackHead=NULL;//(LinkedList *) malloc(sizeof(LinkedList));
-//	stackHead->num.digits=(char *) malloc(sizeof(char)*10);
-//	stackHead->num.num_of_digits=0;
+	LinkedList *stackHead=NULL;
 	char ch;
-	size_t size=10, tempSize=0;
+	size_t size=10;
+	long tempSize=0;
 	char *tempString=(char *)malloc(sizeof(char)*10);
 	if (!tempString)
 	{
@@ -116,7 +115,9 @@ int main()
 			tempSize=0;
 			tempLink->next=stackHead;
 			stackHead=tempLink;
+			continue;
 		}
+		puts("calc: stack empty");
 	}
 	return 0;
 }
