@@ -1,12 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <stdbool.h>
-
-extern char *addition(char *, char *);
-extern char *substraction(char *, char*);
-extern char *multipliaction(char*, char*);
-extern char *division(char*, char*);
 
 typedef struct bigNum
 {
@@ -20,23 +14,34 @@ typedef struct Link
 	struct Link *next;
 } LinkedList;
 
-void increase(LinkedList *stackHead, size_t *size)
+extern char *addition(BigNum *, BigNum *);
+
+extern char *substraction(BigNum *, BigNum *);
+
+extern char *multipliaction(BigNum *, BigNum *);
+
+extern char *division(BigNum *, BigNum *);
+
+char *increase(char *string, size_t *size)
 {
-	char *temp=(char *) malloc((*size+=10)*sizeof(char));
+	char *temp=(char *)malloc((*size+=10)*sizeof(char));
 	if (!temp)
 	{
-		puts("Not enough ram!!!");
+		puts("calc: not enough ram!!!");
 		exit(-1);
 	}
-	strcpy(temp, stackHead->num.digits);
-	free(stackHead->num.digits);
-	stackHead->num.digits=temp;
+	strcpy(temp, string);
+	free(string);
+	return temp;
 }
 
-
-bool stackIsEmpty()
+void clear(LinkedList *stackHead)
 {
-	return 0;
+	if (!stackHead)
+		return;
+	clear(stackHead->next);
+	free(stackHead->num.digits);
+	free(stackHead);
 }
 
 int main()
@@ -44,43 +49,73 @@ int main()
 	LinkedList *stackHead=NULL;//(LinkedList *) malloc(sizeof(LinkedList));
 //	stackHead->num.digits=(char *) malloc(sizeof(char)*10);
 //	stackHead->num.num_of_digits=0;
-	int ch;
-	size_t size=0;
-	while (EOF!=(ch=fgetc(stdin))/* && ch!='\n'*/)
+	char ch;
+	size_t size=10, tempSize=0;
+	char *tempString=(char *)malloc(sizeof(char)*10);
+	if (!tempString)
 	{
-		stackHead->num.digits[stackHead->num.num_of_digits++]=(char) ch;
-		if (stackHead->num.num_of_digits+1==size)
-			increase(stackHead, &size);
-		if (strcmp(ch, "+")==0 && !stackIsEmpty())
+		puts("calc: not enough ram!!!");
+		exit(-1);
+	}
+	while (EOF!=(ch=(char)fgetc(stdin)))
+	{
+		tempString[tempSize++]=ch;
+		if (tempSize==size)
+			tempString=increase(tempString, &size);
+		if (strcmp(tempString, "+")==0 && stackHead && stackHead->next)
 		{
 //			addition();
 			continue;
 		}
-		if (strcmp(ch, "-")==0 && !stackIsEmpty())
+		if (strcmp(tempString, "-")==0 && stackHead && stackHead->next)
 		{
 //			substraction();
 			continue;
 		}
-		if (strcmp(ch, "*")==0 && !stackIsEmpty())
+		if (strcmp(tempString, "*")==0 && stackHead && stackHead->next)
 		{
 //			multipliaction();
 			continue;
 		}
-		if (strcmp(ch, "/")==0 && !stackIsEmpty())
+		if (strcmp(tempString, "/")==0 && stackHead && stackHead->next)
 		{
 //			division();
 			continue;
 		}
-		if (strcmp(ch, "p")==0)
+		if (strcmp(tempString, "p")==0)
 		{
-			//TODO pop from stack and print the latest number that entered
+			puts(stackHead ? stackHead->num.digits : "calc: stack empty");
 			continue;
 		}
-		if (strcmp(ch,"q")==0)
+		if (strcmp(tempString, "q")==0)
 			exit(1);
-		if (strcmp(ch,"c")==0)
+		if (strcmp(tempString, "c")==0)
 		{
-			//TODO Clear everything from the stack
+			clear(stackHead);
+			stackHead=NULL;
+			continue;
+		}
+		if (ch=='\n')
+		{
+			LinkedList *tempLink=(LinkedList *)malloc(sizeof(LinkedList));
+			if (!tempLink)
+			{
+				puts("calc: not enough ram!!!");
+				exit(-1);
+			}
+			tempString[tempSize-1]='\0';
+			tempLink->num.digits=tempString;
+			tempString=(char *)malloc(sizeof(char)*10);
+			if (!tempString)
+			{
+				puts("calc: not enough ram!!!");
+				exit(-1);
+			}
+			size=10;
+			tempLink->num.num_of_digits=tempSize-1;
+			tempSize=0;
+			tempLink->next=stackHead;
+			stackHead=tempLink;
 		}
 	}
 	return 0;

@@ -1,5 +1,6 @@
 all: clean main.o add.o sub.o mult.o div.o
 	gcc -g -Wall -o calc main.o add.o sub.o mult.o div.o
+	rm -f *.o
 
 main.o:
 	gcc -g -Wall -c -o main.o main.c
