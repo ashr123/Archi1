@@ -22,6 +22,16 @@ extern void multipliaction(char *, char *, char *);
 
 extern void division(char *, char *, char *);
 
+size_t MAX(size_t a, size_t b)
+{
+	return a>b ? a : b;
+}
+
+size_t MIN(size_t a, size_t b)
+{
+	return a<b ? a : b;
+}
+
 char *increase(char *string, size_t *size)
 {
 	char *temp=(char *)malloc((*size+=10)*sizeof(char));
@@ -50,7 +60,7 @@ int main()
 	char ch;
 	size_t size=10;
 	long tempSize=0;
-	char *tempString=(char *)malloc(sizeof(char)*10);
+	char *tempString=(char *)malloc(sizeof(char)*10), *result;
 	if (!tempString)
 	{
 		puts("calc: not enough ram!!!");
@@ -63,7 +73,12 @@ int main()
 			tempString=increase(tempString, &size);
 		if (strcmp(tempString, "+")==0 && stackHead && stackHead->next)
 		{
-//			addition();
+			size_t maxsize=MAX(strlen(stackHead->num.digits), strlen(stackHead->next->num.digits));
+			result=(char *)malloc(sizeof(char)*(maxsize+2));
+			addition(maxsize==strlen(stackHead->num.digits) ? stackHead->num.digits : stackHead->next->num.digits,
+			         maxsize!=strlen(stackHead->num.digits) ? stackHead->num.digits : stackHead->next->num.digits,
+			         result);
+			puts(result);
 			continue;
 		}
 		if (strcmp(tempString, "-")==0 && stackHead && stackHead->next)
@@ -117,7 +132,7 @@ int main()
 			stackHead=tempLink;
 			continue;
 		}
-		puts("calc: stack empty");
+		//puts("calc: stack empty");
 	}
 	return 0;
 }

@@ -62,6 +62,10 @@ section .text                    	; our code is always in the .text section
 ;;;;;;;;;;;;;;;; FUNCTION EFFECTIVE CODE ENDS HERE ;;;;;;;;;;;;;;;;
     breakLoop:
 	;mov rax, [an]         ; return an (returned values are in rax)
-	mov rsp, rbp
-	pop rbp
-	ret
+		inc rcx
+		mov byte [rcx], r12b
+		inc rcx
+		mov byte [rcx], '\0'
+		mov rsp, rbp
+		pop rbp
+		ret
