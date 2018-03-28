@@ -2,7 +2,7 @@ section .data                    	; data section, read-write
 	an: DQ 0              	; this is a temporary var
 
 section .text                    	; our code is always in the .text section
-	global addition          	    ; makes the function appear in global scope
+	global addition         	    ; makes the function appear in global scope
 	extern printf            	; tell linker that printf is defined elsewhere 							; (not used in the program)
 ;rdi->rsi->rdx->rcx->r8->r9
 	addition:                        	    ; functions are defined as labels
@@ -16,11 +16,11 @@ section .text                    	; our code is always in the .text section
 		mov rax, rdi
 		mov rbx, rsi
 		mov rcx, rdx
-		mov r15, rax
-		mov r14, rbx
+		mov r15, rax; big arr
+		mov r14, rbx; small arr
 		mov r12, 0 ;carry
 
-        prepA:
+                prepA:
 			inc rax
 			cmp byte [rax], 0
 			jnz prepA
@@ -32,13 +32,13 @@ section .text                    	; our code is always in the .text section
 			dec rbx
 			
 		adds:
-			mov r13, 0
+			mov r13, 0;r13=rolling
 			cmp rbx, r14
 			jne continueAdds
 			mov r13, [rbx]
 		continueAdds:
 			sub  r13, '0'
-			add r13, r12 ;add carry
+			add r13, r12 ;adds carry
 			mov r12, 0
 			add  r13b, [rax]
 			cmp r13, '9'
