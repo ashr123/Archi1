@@ -40,13 +40,13 @@ section .text                    	; our code is always in the .text section
 			sub  r13, '0'
 			add r13, r12 ;add carry
 			mov r12, 0
-			add  r13, [rax]
+			add  r13b, [rax]
 			cmp r13, '9'
 			jng assA
 			sub r13, 10
 			mov r12, 1
 			assA:
-				mov byte [rcx], r13
+				mov [rcx], r13b
 			inc rcx
 			cmp rax, r15 ;if (rax!=r15) dec rax
 			je breakLoop
