@@ -14,13 +14,13 @@ typedef struct Link
 	struct Link *next;
 } LinkedList;
 
-extern char *addition(BigNum *, BigNum *);
+extern void addition(char *, char *, char *);
 
-extern char *substraction(BigNum *, BigNum *);
+extern void substraction(char *, char *, char *);
 
-extern char *multipliaction(BigNum *, BigNum *);
+extern void multipliaction(char *, char *, char *);
 
-extern char *division(BigNum *, BigNum *);
+extern void division(char *, char *, char *);
 
 char *increase(char *string, size_t *size)
 {
