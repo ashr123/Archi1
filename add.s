@@ -18,6 +18,8 @@ section .text                    	; our code is always in the .text section
 		mov rcx, rdx
 		mov r15, rax; big arr
 		mov r14, rbx; small arr
+		dec r15
+		dec r14
 		mov r12, 0 ;carry
 
                 prepA:
@@ -55,13 +57,11 @@ section .text                    	; our code is always in the .text section
 			je adds
 			dec rbx
 			jmp adds ;loop
-			
-				
-				
-			
+                        
 
 ;;;;;;;;;;;;;;;; FUNCTION EFFECTIVE CODE ENDS HERE ;;;;;;;;;;;;;;;;
-	mov rax, [an]         ; return an (returned values are in rax)
+    breakLoop:
+	;mov rax, [an]         ; return an (returned values are in rax)
 	mov rsp, rbp
 	pop rbp
 	ret
