@@ -22,7 +22,7 @@ section .text                    	; our code is always in the .text section
 		dec r14
 		mov r12, 0 ;carry
 
-                prepA:
+        prepA:
 			inc rax
 			cmp byte [rax], 0
 			jnz prepA
@@ -32,14 +32,14 @@ section .text                    	; our code is always in the .text section
 			cmp byte [rbx], 0
 			jnz prepB
 			dec rbx
-			
+
 		adds:
-			mov r13, 0;r13=rolling
+			mov r13, 0      ;r13=rolling
 			cmp rbx, r14
-			jne continueAdds
+			je continueAdds
 			mov r13, [rbx]
-		continueAdds:
 			sub  r13, '0'
+		continueAdds:
 			add r13, r12 ;adds carry
 			mov r12, 0
 			add  r13b, [rax]
@@ -50,22 +50,27 @@ section .text                    	; our code is always in the .text section
 			assA:
 				mov [rcx], r13b
 			inc rcx
+			
+			dec rax
 			cmp rax, r15 ;if (rax!=r15) dec rax
 			je breakLoop
-			dec rax
+			
 			cmp rbx, r14 ;if (rbx!=r14) dec rbx
 			je adds
 			dec rbx
+			
 			jmp adds ;loop
-                        
+
 
 ;;;;;;;;;;;;;;;; FUNCTION EFFECTIVE CODE ENDS HERE ;;;;;;;;;;;;;;;;
     breakLoop:
 	;mov rax, [an]         ; return an (returned values are in rax)
-		inc rcx
-		mov byte [rcx], r12b
-		inc rcx
-		mov byte [rcx], '\0'
-		mov rsp, rbp
-		pop rbp
-		ret
+	cmp r12, 0
+        je notAddCarry
+        mov byte [rcx], '1'
+        inc rcx
+    notAddCarry:
+        mov byte [rcx], 0
+        mov rsp, rbp
+        pop rbp
+        ret

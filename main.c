@@ -54,6 +54,21 @@ void clear(LinkedList *stackHead)
 	free(stackHead);
 }
 
+char *reverseStr(char *str)
+{
+	size_t n=strlen(str);
+	
+	// Swap character starting from two
+	// corners
+	for (int i=0; i<n/2; i++)
+	{
+		char temp=str[i];
+		str[i]=str[n-i-1];
+		str[n-i-1]=temp;
+	}
+	return str;
+}
+
 int main()
 {
 	LinkedList *stackHead=NULL;
@@ -75,15 +90,30 @@ int main()
 		{
 			size_t maxsize=MAX(strlen(stackHead->num.digits), strlen(stackHead->next->num.digits));
 			result=(char *)malloc(sizeof(char)*(maxsize+2));
-			addition(maxsize==strlen(stackHead->num.digits) ? stackHead->num.digits : stackHead->next->num.digits,
-			         maxsize!=strlen(stackHead->num.digits) ? stackHead->num.digits : stackHead->next->num.digits,
+			addition(maxsize==strlen(stackHead->num.digits) ?
+			         stackHead->num.digits :
+			         stackHead->next->num.digits,
+			         maxsize!=strlen(stackHead->num.digits) ?
+			         stackHead->num.digits :
+			         stackHead->next->num.digits,
 			         result);
-			puts(result);
+			
+			puts(reverseStr(result));
 			continue;
 		}
 		if (strcmp(tempString, "-")==0 && stackHead && stackHead->next)
 		{
-//			substraction();
+			size_t maxsize=MAX(strlen(stackHead->num.digits), strlen(stackHead->next->num.digits));
+			result=(char *)malloc(sizeof(char)*(maxsize+2));
+			substraction(maxsize==strlen(stackHead->num.digits) ?
+			         stackHead->num.digits :
+			         stackHead->next->num.digits,
+			         maxsize!=strlen(stackHead->num.digits) ?
+			         stackHead->num.digits :
+			         stackHead->next->num.digits,
+			         result);
+			
+			puts(reverseStr(result));
 			continue;
 		}
 		if (strcmp(tempString, "*")==0 && stackHead && stackHead->next)
