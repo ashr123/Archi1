@@ -18,11 +18,12 @@ section .text                    	; our code is always in the .text section
 		mov rcx, rdx
 		mov r15, rax; big arr
 		mov r14, rbx; small arr
-		dec r15
-		dec r14
+		dec r15  ;points to index -1
+		dec r14  ;points to index -1
 		mov r12, 0 ;carry
+		mov r13, 0
 
-        prepA:
+                prepA:
 			inc rax
 			cmp byte [rax], 0
 			jnz prepA
@@ -34,24 +35,28 @@ section .text                    	; our code is always in the .text section
 			dec rbx
 
 		subs:
-			mov r13, 0      ;r13=rolling
+			;mov r13, 0      ;r13=rolling
+			;cmp rbx, r14
+			;je continueSubs
+			mov r13b, [rax]
+			;sub  r13, '0'
+                        
+                        sub r13, r12 ;subs carry
+			mov r12, 0
+			 ;substract in order to calculate value
 			cmp rbx, r14
 			je continueSubs
-			mov r13, [rbx]
-			;sub  r13, '0'
-		continueSubs:
-			sub r13, r12 ;subs carry
-			mov r12, 0
-			sub byte [rax], '0'
-			sub  r13b, [rax]
-			add byte [rax], '0'
-			cmp r13, '0'
-			jnl assA
+			sub byte [rbx], '0'
+			sub r13b, [rbx] ;the real substraction
+			add byte [rbx], '0';adds what we substracted back
+                continueSubs:
+			cmp r13, '0' ;if needs borrow
+			jnl assA;check if we need to borrow
 			add r13, 10
-			mov r12, 1
+			mov r12, 1;turn on the borrow flag
 			assA:
 				mov [rcx], r13b
-			inc rcx
+                                inc rcx
 			
 			dec rax
 			cmp rax, r15 ;if (rax!=r15) dec rax
@@ -62,6 +67,7 @@ section .text                    	; our code is always in the .text section
 			dec rbx
 			
 			jmp subs ;loop
+                        
 
 
 

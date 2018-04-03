@@ -104,7 +104,7 @@ int main()
 		if (strcmp(tempString, "-")==0 && stackHead && stackHead->next)
 		{
 			size_t maxsize=MAX(strlen(stackHead->num.digits), strlen(stackHead->next->num.digits));
-			result=(char *)malloc(sizeof(char)*(maxsize+2));
+			result=(char *)malloc(sizeof(char)*(maxsize+1));
 			substraction(maxsize==strlen(stackHead->num.digits) ?
 			         stackHead->num.digits :
 			         stackHead->next->num.digits,
