@@ -24,7 +24,7 @@ extern void multipliaction(char *, char *, char *);
 
 extern void division(char *, char *, char *);
 
-char* multiC(char *c1, char *c2);
+extern void divisionBy2(char *);
 
 void checkMalloc(void *toCheck)
 {
@@ -62,6 +62,39 @@ char *trim0(char *str)
 	return str;
 }
 
+char *multiC(char *c1, char *c2)
+{
+	char *sum=malloc(sizeof(char)*2);
+	checkMalloc(sum);
+	sum[0]='0';
+	sum[1]='\0';
+	while (1)
+	{
+		char firstDigit=c1[strlen(c1)-1];
+		if (firstDigit=='1' || firstDigit=='3' || firstDigit=='5' || firstDigit=='7' || firstDigit=='9')
+		{
+			size_t maxsize=MAX(strlen(sum), strlen(c2));
+			char *temp=(char *)malloc(sizeof(char)*(strlen(maxsize==strlen(sum) ? sum : c2)+2));
+			checkMalloc(temp);
+			addition(maxsize==strlen(sum) ? sum : c2,
+			         maxsize!=strlen(sum) ? sum : c2,
+			         temp);
+			free(sum);
+			sum=reverseStr(temp);
+			if (strcmp(c1, "1")==0)
+				return sum;
+			c1[strlen(c1)-1]--;
+		}
+		char *temp2=(char *)(malloc(sizeof(char)*(strlen(c1)+2)));
+		checkMalloc(temp2);
+		addition(c2, c2, temp2);
+		free(c2);
+		c2=reverseStr(temp2);
+		divisionBy2(c1);
+		reverseStr(trim0(reverseStr(c1)));
+	}
+}
+
 void divC(char *first, char *second, char *factor, char *sum, char **temp)
 {
 	if (strcmp(first, second)<0)
@@ -78,54 +111,19 @@ void divC(char *first, char *second, char *factor, char *sum, char **temp)
 		free(sum);
 		sum=temp[1];
 	}
-	if (strcmp(first,second)>=0)
+	if (strcmp(first, second)>=0)
 	{
 		char *result=(char *)malloc(sizeof(char)*(strlen(sum)+2));
 		addition(factor, sum, result);
 		free(sum);
 		sum=reverseStr(result);
 		
-		result = (char *)malloc(sizeof(char)*(strlen(sum)+1));
-		substraction(first,second,result);
+		result=(char *)malloc(sizeof(char)*(strlen(sum)+1));
+		substraction(first, second, result);
 		reverseStr(trim0(result));
 	}
 	temp[0]=first;
 	temp[1]=sum;
-}
-
-char* multiC(char *c1, char *c2)
-{
-	char *sum = malloc(sizeof(char)*2);
-	checkMalloc(sum);
-	sum[0]='0';
-	sum[1]='\0';
-	while(strcmp(c1, "1")!=0)
-	{
-		char firstDigit=c1[strlen(c1)-1];
-		if (firstDigit=='1' || firstDigit=='3' || firstDigit=='5' || firstDigit=='7' || firstDigit=='9')
-		{
-			size_t maxsize=MAX(strlen(sum), strlen(c2));
-			char *temp=(char *)malloc(sizeof(char)*(strlen(maxsize==strlen(sum) ? sum : c2)+2));
-			checkMalloc(temp);
-			addition(maxsize==strlen(sum) ? sum : c2,
-			         maxsize!=strlen(sum) ? sum : c2,
-			         temp);
-			free(sum);
-			sum=reverseStr(temp);
-			c1[strlen(c1)-1]--;
-		}
-		char *temp, *temp2=(char *)(malloc(sizeof(char)*(strlen(c1)+2)));
-		checkMalloc(temp2);
-		addition(c2, c2, temp2);
-		free(c2);
-		c2=temp2;
-		temp=divC(c1, "2", 1, );
-		free(c1);
-		c1=temp;
-		if (strcmp(c1, "1")==0)
-			return sum;
-	}
-	return c1;
 }
 
 size_t MIN(size_t a, size_t b)
@@ -204,23 +202,31 @@ int main()
 			size_t maxsize=MAX(strlen(stackHead->num.digits), strlen(stackHead->next->num.digits));
 			result=(char *)malloc(sizeof(char)*(maxsize+1));
 			substraction(maxsize==strlen(stackHead->num.digits) ?
-			         stackHead->num.digits :
-			         stackHead->next->num.digits,
-			         maxsize!=strlen(stackHead->num.digits) ?
-			         stackHead->num.digits :
-			         stackHead->next->num.digits,
-			         result);
+			             stackHead->num.digits :
+			             stackHead->next->num.digits,
+			             maxsize!=strlen(stackHead->num.digits) ?
+			             stackHead->num.digits :
+			             stackHead->next->num.digits,
+			             result);
 			clear(pop());
 			clear(pop());
-			puts(reverseStr(trim0(result)));
-			push(result);
+			push(reverseStr(trim0(result)));
 			continue;
 		}
 		if (strcmp(tempString, "*")==0 && stackHead && stackHead->next)
 		{
 //			multipliaction();
-			char *res = multiC(*c1,*c2);
+			size_t maxsize=MAX(strlen(stackHead->num.digits), strlen(stackHead->next->num.digits));
 			
+			char *res=multiC(maxsize==strlen(stackHead->num.digits) ?
+			                 stackHead->num.digits :
+			                 stackHead->next->num.digits,
+			                 maxsize!=strlen(stackHead->num.digits) ?
+			                 stackHead->num.digits :
+			                 stackHead->next->num.digits);
+			clear(pop());
+			clear(pop());
+			push(res);
 			continue;
 		}
 		if (strcmp(tempString, "/")==0 && stackHead && stackHead->next)
@@ -244,7 +250,7 @@ int main()
 		if (ch=='\n')
 		{
 			LinkedList *tempLink=(LinkedList *)malloc(sizeof(LinkedList));
-			checkMalloc(tempLink)
+			checkMalloc(tempLink);
 			tempString[tempSize-1]='\0';
 			tempLink->num.digits=tempString;
 			tempString=(char *)malloc(sizeof(char)*10);

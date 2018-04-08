@@ -1,5 +1,5 @@
-section .data                    	; data section, read-write
-	an: DQ 0              	; this is a temporary var
+;section .data                    	; data section, read-write
+;	an: DQ 0              	; this is a temporary var
 
 section .text                    	; our code is always in the .text section
 	global addition         	    ; makes the function appear in global scope
@@ -11,7 +11,7 @@ section .text                    	; our code is always in the .text section
 		mov rcx, rdi			    ; get function argument
 
 ;;;;;;;;;;;;;;;; FUNCTION EFFECTIVE CODE STARTS HERE ;;;;;;;;;;;;;;;;
-		mov	qword [an], 0		; initialize answer
+		;mov	 qword [an], 0		; initialize answer
 
 		mov rax, rdi
 		mov rbx, rsi
@@ -37,7 +37,7 @@ section .text                    	; our code is always in the .text section
 			mov r13, 0      ;r13=rolling
 			cmp rbx, r14
 			je continueAdds
-			mov r13, [rbx]
+			mov r13b, [rbx]
 			sub  r13, '0'
 		continueAdds:
 			add r13, r12 ;adds carry
