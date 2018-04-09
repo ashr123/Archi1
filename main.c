@@ -178,11 +178,6 @@ char *divC(char *first, char *second)
 	return result;
 }
 
-size_t MIN(size_t a, size_t b)
-{
-	return a<b ? a : b;
-}
-
 char *increase(char *string, size_t *size)
 {
 	char *temp=(char *)malloc((*size+=10)*sizeof(char));
@@ -327,13 +322,14 @@ int main()
 				tempSize=0;
 				continue;
 			}
-			LinkedList *tempLink=(LinkedList *)malloc(sizeof(LinkedList));
-			checkMalloc(tempLink);
 			tempString[tempSize-1]='\0';
-			tempLink->num.digits=tempString;
+			push(tempString);
+//			LinkedList *tempLink=(LinkedList *)malloc(sizeof(LinkedList));
+//			checkMalloc(tempLink);
+//			tempLink->num.digits=tempString;
 			tempString=newTempString(&tempSize, &size);
-			tempLink->next=stackHead;
-			stackHead=tempLink;
+//			tempLink->next=stackHead;
+//			stackHead=tempLink;
 			continue;
 		}
 		//puts("calc: stack empty");
