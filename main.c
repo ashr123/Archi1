@@ -95,35 +95,75 @@ char *multiC(char *c1, char *c2)
 	}
 }
 
-void divC(char *first, char *second, char *factor, char *sum, char **temp)
+void divCHepler(char *first, char *second, char *result, char *factor)
 {
 	if (strcmp(first, second)<0)
 	{
-		temp[0]=first;
-		temp[1]=sum;
+		divisionBy2(second);
+		reverseStr(trim0(reverseStr(second)));
+		divisionBy2(factor);
+		reverseStr(trim0(reverseStr(factor)));
 		return;
 	}
-	divC(first, multiC(second, "2"), multiC(factor, "2"), sum, temp);
-	if (temp[0]!=first)
-	{
-		free(first);
-		first=temp[0];
-		free(sum);
-		sum=temp[1];
-	}
+	char *temp=(char *)(malloc(sizeof(char)*(strlen(factor)+2)));
+	checkMalloc(temp);
+	addition(factor, factor, temp);
+	free(factor);
+	factor=reverseStr(temp);
+	
+	temp=(char *)(malloc(sizeof(char)*(strlen(second)+2)));
+	checkMalloc(temp);
+	addition(second, second, temp);
+	free(second);
+	second=reverseStr(temp);
+	
+	divCHepler(first, second, result, factor);
+	
 	if (strcmp(first, second)>=0)
 	{
-		char *result=(char *)malloc(sizeof(char)*(strlen(sum)+2));
-		addition(factor, sum, result);
-		free(sum);
-		sum=reverseStr(result);
+		temp=(char *)(malloc(sizeof(char)*(strlen(second)+1)));
+		checkMalloc(temp);
+		substraction(first, second, temp);
+		strcpy(first, reverseStr(trim0(temp)));
+		free(temp);
 		
-		result=(char *)malloc(sizeof(char)*(strlen(sum)+1));
-		substraction(first, second, result);
-		reverseStr(trim0(result));
+		temp=(char *)(malloc(sizeof(char)*(strlen(second)+strlen(factor)+1)));
+		checkMalloc(temp);
+		addition(result, factor, temp);
+		strcpy(result, reverseStr(temp));
+		free(temp);
 	}
-	temp[0]=first;
-	temp[1]=sum;
+	divisionBy2(second);
+	reverseStr(trim0(reverseStr(second)));
+	divisionBy2(factor);
+	reverseStr(trim0(reverseStr(factor)));
+}
+
+char *divC(char *first, char *second)
+{
+	char *result=(char *)malloc(sizeof(char)*(strlen(first)+1));
+	checkMalloc(result);
+	sprintf(result, "0");
+	char *factor=(char *)malloc(sizeof(char)*2);
+	checkMalloc(factor);
+	sprintf(result, "1");
+	divCHepler(first, second, result, factor);
+	if (strcmp(first, second)>=0)
+	{
+		char *temp=(char *)(malloc(sizeof(char)*(strlen(second)+1)));
+		checkMalloc(temp);
+		substraction(first, second, temp);
+		strcpy(first, reverseStr(trim0(temp)));
+		free(temp);
+		
+		temp=(char *)(malloc(sizeof(char)*(strlen(second)+strlen(factor)+1)));
+		checkMalloc(temp);
+		addition(result, factor, temp);
+		strcpy(result, reverseStr(temp));
+		free(temp);
+	}
+	free(factor);
+	return result;
 }
 
 size_t MIN(size_t a, size_t b)
@@ -232,6 +272,10 @@ int main()
 		if (strcmp(tempString, "/")==0 && stackHead && stackHead->next)
 		{
 //			division();
+			char *res=divC(stackHead->num.digits, stackHead->next->num.digits);
+			clear(pop());
+			clear(pop());
+			push(res);
 			continue;
 		}
 		if (strcmp(tempString, "p")==0)
