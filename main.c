@@ -26,6 +26,15 @@ extern void division(char *, char *, char *);
 
 extern void divisionBy2(char *);
 
+int strcmp1(const char * __s1, const char * __s2)
+{
+	if (strlen(__s1)<strlen(__s2))
+		return -1;
+	if (strlen(__s1)==strlen(__s2))
+		return strcmp(__s1, __s2);
+	return 1;
+}
+
 void checkMalloc(void *toCheck)
 {
 	if (!toCheck)
@@ -81,7 +90,7 @@ char *multiC(char *c1, char *c2)
 			         temp);
 			free(sum);
 			sum=reverseStr(temp);
-			if (strcmp(c1, "1")==0)
+			if (strcmp1(c1, "1")==0)
 				return sum;
 			c1[strlen(c1)-1]--;
 		}
@@ -97,29 +106,31 @@ char *multiC(char *c1, char *c2)
 
 void divCHepler(char *first, char *second, char *result, char *factor)
 {
-	if (strcmp(first, second)<0)
+	if (strcmp1(first, second)<0)
 	{
-		divisionBy2(second);
-		reverseStr(trim0(reverseStr(second)));
-		divisionBy2(factor);
-		reverseStr(trim0(reverseStr(factor)));
+//		divisionBy2(second);
+//		reverseStr(trim0(reverseStr(second)));
+//		divisionBy2(factor);
+//		reverseStr(trim0(reverseStr(factor)));
 		return;
 	}
 	char *temp=(char *)(malloc(sizeof(char)*(strlen(factor)+2)));
 	checkMalloc(temp);
 	addition(factor, factor, temp);
-	free(factor);
 	factor=reverseStr(temp);
 	
 	temp=(char *)(malloc(sizeof(char)*(strlen(second)+2)));
 	checkMalloc(temp);
 	addition(second, second, temp);
-	free(second);
 	second=reverseStr(temp);
 	
 	divCHepler(first, second, result, factor);
 	
-	if (strcmp(first, second)>=0)
+	divisionBy2(second);
+	reverseStr(trim0(reverseStr(second)));
+	divisionBy2(factor);
+	reverseStr(trim0(reverseStr(factor)));
+	if (strcmp1(first, second)>=0)
 	{
 		temp=(char *)(malloc(sizeof(char)*(strlen(second)+1)));
 		checkMalloc(temp);
@@ -129,14 +140,15 @@ void divCHepler(char *first, char *second, char *result, char *factor)
 		
 		temp=(char *)(malloc(sizeof(char)*(strlen(second)+strlen(factor)+1)));
 		checkMalloc(temp);
-		addition(result, factor, temp);
+		addition(strlen(result)>strlen(factor) ? result : factor,
+		         strlen(result)<=strlen(factor) ? result : factor,
+		         temp);
 		strcpy(result, reverseStr(temp));
 		free(temp);
 	}
-	divisionBy2(second);
-	reverseStr(trim0(reverseStr(second)));
-	divisionBy2(factor);
-	reverseStr(trim0(reverseStr(factor)));
+	
+	free(second);
+	free(factor);
 }
 
 char *divC(char *first, char *second)
@@ -146,9 +158,9 @@ char *divC(char *first, char *second)
 	sprintf(result, "0");
 	char *factor=(char *)malloc(sizeof(char)*2);
 	checkMalloc(factor);
-	sprintf(result, "1");
+	sprintf(factor, "1");
 	divCHepler(first, second, result, factor);
-	if (strcmp(first, second)>=0)
+	if (strcmp1(first, second)>=0)
 	{
 		char *temp=(char *)(malloc(sizeof(char)*(strlen(second)+1)));
 		checkMalloc(temp);
@@ -218,7 +230,7 @@ int main()
 		tempString[tempSize++]=ch;
 		if (tempSize==size)
 			tempString=increase(tempString, &size);
-		if (strcmp(tempString, "+")==0 && stackHead && stackHead->next)
+		if (strcmp1(tempString, "+")==0 && stackHead && stackHead->next)
 		{
 			//Addition();
 			size_t maxsize=MAX(strlen(stackHead->num.digits), strlen(stackHead->next->num.digits));
@@ -232,11 +244,11 @@ int main()
 			         result);
 			clear(pop());
 			clear(pop());
-			puts(reverseStr(result));
+			tempString=(char *)malloc(sizeof(char)*10);
 			push(result);
 			continue;
 		}
-		if (strcmp(tempString, "-")==0 && stackHead && stackHead->next)
+		if (strcmp1(tempString, "-")==0 && stackHead && stackHead->next)
 		{
 			//substraction();
 			size_t maxsize=MAX(strlen(stackHead->num.digits), strlen(stackHead->next->num.digits));
@@ -250,10 +262,11 @@ int main()
 			             result);
 			clear(pop());
 			clear(pop());
+			tempString=(char *)malloc(sizeof(char)*10);
 			push(reverseStr(trim0(result)));
 			continue;
 		}
-		if (strcmp(tempString, "*")==0 && stackHead && stackHead->next)
+		if (strcmp1(tempString, "*")==0 && stackHead && stackHead->next)
 		{
 //			multipliaction();
 			size_t maxsize=MAX(strlen(stackHead->num.digits), strlen(stackHead->next->num.digits));
@@ -266,26 +279,28 @@ int main()
 			                 stackHead->next->num.digits);
 			clear(pop());
 			clear(pop());
+			tempString=(char *)malloc(sizeof(char)*10);
 			push(res);
 			continue;
 		}
-		if (strcmp(tempString, "/")==0 && stackHead && stackHead->next)
+		if (strcmp1(tempString, "/")==0 && stackHead && stackHead->next)
 		{
 //			division();
 			char *res=divC(stackHead->num.digits, stackHead->next->num.digits);
 			clear(pop());
 			clear(pop());
+			tempString=(char *)malloc(sizeof(char)*10);
 			push(res);
 			continue;
 		}
-		if (strcmp(tempString, "p")==0)
+		if (strcmp1(tempString, "p")==0)
 		{
 			puts(stackHead ? stackHead->num.digits : "calc: stack empty");
 			continue;
 		}
-		if (strcmp(tempString, "q")==0)
+		if (strcmp1(tempString, "q")==0)
 			exit(1);
-		if (strcmp(tempString, "c")==0)
+		if (strcmp1(tempString, "c")==0)
 		{
 			clear(stackHead);
 			stackHead=NULL;
