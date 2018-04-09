@@ -187,6 +187,8 @@ char *increase(char *string, size_t *size)
 {
 	char *temp=(char *)malloc((*size+=10)*sizeof(char));
 	checkMalloc(temp);
+	for (int i=0; i<*size; ++i)
+		temp[i]='\0';
 	strcpy(temp, string);
 	free(string);
 	return temp;
@@ -218,6 +220,16 @@ void push(char *tempString)
 	stackHead=tempLink;
 }
 
+char *newTempString(long *tempSize)
+{
+	char *temp=(char *)malloc(sizeof(char)*10);
+	checkMalloc(temp);
+	for (int i=0; i<10; ++i)
+		temp[i]='\0';
+	*tempSize=0;
+	return temp;
+}
+
 int main()
 {
 	char ch;
@@ -244,7 +256,7 @@ int main()
 			         result);
 			clear(pop());
 			clear(pop());
-			tempString=(char *)malloc(sizeof(char)*10);
+			tempString=newTempString(&tempSize);
 			push(result);
 			continue;
 		}
@@ -262,7 +274,7 @@ int main()
 			             result);
 			clear(pop());
 			clear(pop());
-			tempString=(char *)malloc(sizeof(char)*10);
+			tempString=newTempString(&tempSize);
 			push(reverseStr(trim0(result)));
 			continue;
 		}
@@ -279,7 +291,7 @@ int main()
 			                 stackHead->next->num.digits);
 			clear(pop());
 			clear(pop());
-			tempString=(char *)malloc(sizeof(char)*10);
+			tempString=newTempString(&tempSize);
 			push(res);
 			continue;
 		}
@@ -289,7 +301,7 @@ int main()
 			char *res=divC(stackHead->num.digits, stackHead->next->num.digits);
 			clear(pop());
 			clear(pop());
-			tempString=(char *)malloc(sizeof(char)*10);
+			tempString=newTempString(&tempSize);
 			push(res);
 			continue;
 		}
@@ -308,15 +320,19 @@ int main()
 		}
 		if (ch=='\n')
 		{
+			if (strcmp(tempString, "!")<0)
+			{
+				tempString[0]='\0';
+				tempSize=0;
+				continue;
+			}
 			LinkedList *tempLink=(LinkedList *)malloc(sizeof(LinkedList));
 			checkMalloc(tempLink);
 			tempString[tempSize-1]='\0';
 			tempLink->num.digits=tempString;
-			tempString=(char *)malloc(sizeof(char)*10);
-			checkMalloc(tempString);
+			tempString=newTempString(&tempSize);
 			size=10;
 //			tempLink->num.num_of_digits=tempSize-1;
-			tempSize=0;
 			tempLink->next=stackHead;
 			stackHead=tempLink;
 			continue;
