@@ -220,13 +220,14 @@ void push(char *tempString)
 	stackHead=tempLink;
 }
 
-char *newTempString(long *tempSize)
+char *newTempString(long *tempSize, size_t *size)
 {
 	char *temp=(char *)malloc(sizeof(char)*10);
 	checkMalloc(temp);
 	for (int i=0; i<10; ++i)
 		temp[i]='\0';
 	*tempSize=0;
+	*size=10;
 	return temp;
 }
 
@@ -256,7 +257,7 @@ int main()
 			         result);
 			clear(pop());
 			clear(pop());
-			tempString=newTempString(&tempSize);
+			tempString=newTempString(&tempSize, &size);
 			push(result);
 			continue;
 		}
@@ -274,7 +275,7 @@ int main()
 			             result);
 			clear(pop());
 			clear(pop());
-			tempString=newTempString(&tempSize);
+			tempString=newTempString(&tempSize, &size);
 			push(reverseStr(trim0(result)));
 			continue;
 		}
@@ -291,17 +292,17 @@ int main()
 			                 stackHead->next->num.digits);
 			clear(pop());
 			clear(pop());
-			tempString=newTempString(&tempSize);
+			tempString=newTempString(&tempSize, &size);
 			push(res);
 			continue;
 		}
 		if (strcmp1(tempString, "/")==0 && stackHead && stackHead->next)
 		{
 //			division();
-			char *res=divC(stackHead->num.digits, stackHead->next->num.digits);
+			char *res=divC(stackHead->next->num.digits, stackHead->num.digits);
 			clear(pop());
 			clear(pop());
-			tempString=newTempString(&tempSize);
+			tempString=newTempString(&tempSize, &size);
 			push(res);
 			continue;
 		}
@@ -330,9 +331,7 @@ int main()
 			checkMalloc(tempLink);
 			tempString[tempSize-1]='\0';
 			tempLink->num.digits=tempString;
-			tempString=newTempString(&tempSize);
-			size=10;
-//			tempLink->num.num_of_digits=tempSize-1;
+			tempString=newTempString(&tempSize, &size);
 			tempLink->next=stackHead;
 			stackHead=tempLink;
 			continue;
