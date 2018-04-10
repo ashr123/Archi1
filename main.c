@@ -267,10 +267,10 @@ int main()
 			//substraction();
 //			size_t maxsize=MAX(strlen(stackHead->num.digits), strlen(stackHead->next->num.digits));
 			result=(char *)malloc(sizeof(char)*(MAX(strlen(stackHead->num.digits), strlen(stackHead->next->num.digits))+1));
-			substraction(strcmp1(stackHead->num.digits)>0 ?
+			substraction(strcmp1(stackHead->num.digits, stackHead->next->num.digits)>0 ?
 			             stackHead->num.digits :
 			             stackHead->next->num.digits,
-			             maxsize!=strlen(stackHead->num.digits) ?
+			             strcmp1(stackHead->num.digits, stackHead->next->num.digits)<=0 ?
 			             stackHead->num.digits :
 			             stackHead->next->num.digits,
 			             result);
