@@ -452,7 +452,9 @@ int main()
 		}
 		if (strcmp1(tempString, "p")==0)
 		{
-			puts(stackHead ? stackHead->num.digits : "calc: stack empty");
+			stackHead ? printf("%c%s\n", stackHead->num.sign, stackHead->num.digits) :
+			puts("calc: stack empty");
+//			puts(stackHead ? stackHead->num.digits : "calc: stack empty");
 			tempString=newTempString(&tempSize, &size);
 			continue;
 		}
