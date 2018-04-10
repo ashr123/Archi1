@@ -4,7 +4,7 @@
 
 typedef struct bigNum
 {
-	//char sign;
+	char sign;
 	char *digits;
 } BigNum;
 
@@ -211,6 +211,12 @@ void push(char *tempString)
 	LinkedList *tempLink=(LinkedList *)malloc(sizeof(LinkedList));
 	checkMalloc(tempLink);
 	tempLink->num.digits=tempString;
+	tempLink->num.sign='\0';
+	if (tempString[0]=='_')
+	{
+		strcpy(tempString, tempString+1);
+		tempLink->num.sign='_';
+	}
 	tempLink->next=stackHead;
 	stackHead=tempLink;
 }
@@ -259,9 +265,9 @@ int main()
 		if (strcmp1(tempString, "-")==0 && stackHead && stackHead->next)
 		{
 			//substraction();
-			size_t maxsize=MAX(strlen(stackHead->num.digits), strlen(stackHead->next->num.digits));
-			result=(char *)malloc(sizeof(char)*(maxsize+1));
-			substraction(maxsize==strlen(stackHead->num.digits) ?
+//			size_t maxsize=MAX(strlen(stackHead->num.digits), strlen(stackHead->next->num.digits));
+			result=(char *)malloc(sizeof(char)*(MAX(strlen(stackHead->num.digits), strlen(stackHead->next->num.digits))+1));
+			substraction(strcmp1(stackHead->num.digits)>0 ?
 			             stackHead->num.digits :
 			             stackHead->next->num.digits,
 			             maxsize!=strlen(stackHead->num.digits) ?
