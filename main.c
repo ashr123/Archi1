@@ -212,7 +212,7 @@ void push(char *tempString)
 	if (tempString[0]=='_')
 	{
 		strcpy(tempString, tempString+1);
-		tempLink->num.sign='_';
+		tempLink->num.sign='-';
 	}
 	tempLink->next=stackHead;
 	stackHead=tempLink;
@@ -353,7 +353,7 @@ int main()
 					clear(pop());
 					clear(pop());
 					push(reverseStr(result));
-					stackHead->num.sign='_';
+					stackHead->num.sign='-';
 				}
 				else
 					if (stackHead->num.sign && stackHead->next->num.sign)
@@ -367,7 +367,7 @@ int main()
 						             result);
 						const char sign=(const char)(strcmp1(stackHead->next->num.digits,
 						                                     stackHead->num.digits)>0 ?
-						                             '_' :
+						                             '-' :
 						                             '\0');
 						clear(pop());
 						clear(pop());
