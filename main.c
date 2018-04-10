@@ -252,7 +252,7 @@ int main()
 				addition(strcmp1(stackHead->num.digits, stackHead->next->num.digits)>0 ?
 				         stackHead->num.digits :
 				         stackHead->next->num.digits,
-				         strcmp1(stackHead->num.digits, stackHead->next->num.digits)>0 ?
+				         strcmp1(stackHead->num.digits, stackHead->next->num.digits)<=0 ?
 				         stackHead->num.digits :
 				         stackHead->next->num.digits,
 				         result);
@@ -276,7 +276,7 @@ int main()
 						addition(strcmp1(stackHead->num.digits, stackHead->next->num.digits)>0 ?
 						         stackHead->num.digits :
 						         stackHead->next->num.digits,
-						         strcmp1(stackHead->num.digits, stackHead->next->num.digits)>0 ?
+						         strcmp1(stackHead->num.digits, stackHead->next->num.digits)<=0 ?
 						         stackHead->num.digits :
 						         stackHead->next->num.digits,
 						         result);
@@ -293,7 +293,7 @@ int main()
 						addition(strcmp1(stackHead->num.digits, stackHead->next->num.digits)>0 ?
 						         stackHead->num.digits :
 						         stackHead->next->num.digits,
-						         strcmp1(stackHead->num.digits, stackHead->next->num.digits)>0 ?
+						         strcmp1(stackHead->num.digits, stackHead->next->num.digits)<=0 ?
 						         stackHead->num.digits :
 						         stackHead->next->num.digits,
 						         result);
@@ -311,7 +311,7 @@ int main()
 					addition(strcmp1(stackHead->num.digits, stackHead->next->num.digits)>0 ?
 					         stackHead->num.digits :
 					         stackHead->next->num.digits,
-					         strcmp1(stackHead->num.digits, stackHead->next->num.digits)>0 ?
+					         strcmp1(stackHead->num.digits, stackHead->next->num.digits)<=0 ?
 					         stackHead->num.digits :
 					         stackHead->next->num.digits,
 					         result);
@@ -431,9 +431,7 @@ int main()
 				push(res);
 				stackHead->num.sign='-';
 				continue;
-				
 			}
-			
 		}
 		
 		if (strcmp1(tempString, "/")==0 && stackHead && stackHead->next)
