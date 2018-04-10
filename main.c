@@ -249,7 +249,7 @@ int main()
 					//Addition();
 				size_t maxsize=MAX(strlen(stackHead->num.digits), strlen(stackHead->next->num.digits));
 				result=(char *)malloc(sizeof(char)*(maxsize+2));
-				addition(maxsize==strcmp1(stackHead->num.digits,stackHead->next->num.digits)>0 ?
+				addition(strcmp1(stackHead->num.digits,stackHead->next->num.digits)>0 ?
 				         stackHead->num.digits :
 				         stackHead->next->num.digits,
 				         strcmp1(stackHead->num.digits,stackHead->next->num.digits)>0 ?
@@ -263,14 +263,14 @@ int main()
 				stackHead->num.sign='_';
 				continue;
 			}
-			else if (((stackHead->num.sign=='_')&&(stackHead->next->num.sign==''))
-			         ||((stackHead->num.sign=='')&&(stackHead->next->num.sign=='_'))){
+			else if (((stackHead->num.sign=='_')&&(stackHead->next->num.sign=='\0'))
+			         ||((stackHead->num.sign=='\0')&&(stackHead->next->num.sign=='_'))){
 					//If Just one of them is negative and the second is positive
 					if (strcmp1(stackHead->num.digits, stackHead->num.digits)>=0){
 						//If first is bigger or equal to second
 						size_t maxsize=MAX(strlen(stackHead->num.digits), strlen(stackHead->next->num.digits));
 						result=(char *)malloc(sizeof(char)*(maxsize+2));
-						addition(maxsize==strcmp1(stackHead->num.digits,stackHead->next->num.digits)>0 ?
+						addition(strcmp1(stackHead->num.digits,stackHead->next->num.digits)>0 ?
 						         stackHead->num.digits :
 						         stackHead->next->num.digits,
 						         strcmp1(stackHead->num.digits,stackHead->next->num.digits)>0 ?
@@ -286,7 +286,7 @@ int main()
 						//Second is bigger than first
 						size_t maxsize=MAX(strlen(stackHead->num.digits), strlen(stackHead->next->num.digits));
 						result=(char *)malloc(sizeof(char)*(maxsize+2));
-						addition(maxsize==strcmp1(stackHead->num.digits,stackHead->next->num.digits)>0 ?
+						addition(strcmp1(stackHead->num.digits,stackHead->next->num.digits)>0 ?
 						         stackHead->num.digits :
 						         stackHead->next->num.digits,
 						         strcmp1(stackHead->num.digits,stackHead->next->num.digits)>0 ?
@@ -303,7 +303,7 @@ int main()
 				else{
 					size_t maxsize=MAX(strlen(stackHead->num.digits), strlen(stackHead->next->num.digits));
 					result=(char *)malloc(sizeof(char)*(maxsize+2));
-					addition(maxsize==strcmp1(stackHead->num.digits,stackHead->next->num.digits)>0 ?
+					addition(strcmp1(stackHead->num.digits,stackHead->next->num.digits)>0 ?
 					         stackHead->num.digits :
 					         stackHead->next->num.digits,
 					         strcmp1(stackHead->num.digits,stackHead->next->num.digits)>0 ?
@@ -317,6 +317,7 @@ int main()
 				}
 		}
 		if (strcmp1(tempString, "-")==0 && stackHead && stackHead->next)
+		{
 		{
 			//substraction();
 //			size_t maxsize=MAX(strlen(stackHead->num.digits), strlen(stackHead->next->num.digits));
@@ -394,7 +395,7 @@ int main()
 		if (strcmp1(tempString, "*")==0 && stackHead && stackHead->next)
 		{
 			if (((stackHead->num.sign=='_')&&(stackHead->next->num.sign=='_'))||
-					((stackHead->num.sign=='')&&(stackHead->next->num.sign=='')))
+					((stackHead->num.sign=='\0')&&(stackHead->next->num.sign=='\0')))
 			{
 				//if Both of them are negative or both of them are positive
 //				multiplication();
