@@ -311,6 +311,24 @@ int main()
 						push(reverseStr(trim0(result)));
 						stackHead->num.sign=sign;
 					}
+					else
+					{
+						substraction(strcmp1(stackHead->num.digits, stackHead->next->num.digits)>0 ?
+						             stackHead->num.digits :
+						             stackHead->next->num.digits,
+						             strcmp1(stackHead->num.digits, stackHead->next->num.digits)<=0 ?
+						             stackHead->num.digits :
+						             stackHead->next->num.digits,
+						             result);
+						const char sign=(const char)(strcmp1(stackHead->next->num.digits,
+						                                     stackHead->num.digits)<0 ?
+						                             '_' :
+						                             '\0');
+						clear(pop());
+						clear(pop());
+						push(reverseStr(trim0(result)));
+						stackHead->num.sign=sign;
+					}
 			
 			tempString=newTempString(&tempSize, &size);
 			continue;
@@ -345,14 +363,19 @@ int main()
 		if (strcmp1(tempString, "p")==0)
 		{
 			puts(stackHead ? stackHead->num.digits : "calc: stack empty");
+			tempString=newTempString(&tempSize, &size);
 			continue;
 		}
 		if (strcmp1(tempString, "q")==0)
+		{
+			clear(stackHead);
 			exit(1);
+		}
 		if (strcmp1(tempString, "c")==0)
 		{
 			clear(stackHead);
 			stackHead=NULL;
+			tempString=newTempString(&tempSize, &size);
 			continue;
 		}
 		if (ch=='\n')
