@@ -243,21 +243,78 @@ int main()
 			tempString=increase(tempString, &size);
 		if (strcmp1(tempString, "+")==0 && stackHead && stackHead->next)
 		{
-			//Addition();
-			size_t maxsize=MAX(strlen(stackHead->num.digits), strlen(stackHead->next->num.digits));
-			result=(char *)malloc(sizeof(char)*(maxsize+2));
-			addition(maxsize==strlen(stackHead->num.digits) ?
-			         stackHead->num.digits :
-			         stackHead->next->num.digits,
-			         maxsize!=strlen(stackHead->num.digits) ?
-			         stackHead->num.digits :
-			         stackHead->next->num.digits,
-			         result);
-			clear(pop());
-			clear(pop());
-			tempString=newTempString(&tempSize, &size);
-			push(result);
-			continue;
+			if ((stackHead->num.sign=='_')&&(stackHead->next->num.sign=='_'))
+				//If first is negative and second is negative
+			{
+					//Addition();
+				size_t maxsize=MAX(strlen(stackHead->num.digits), strlen(stackHead->next->num.digits));
+				result=(char *)malloc(sizeof(char)*(maxsize+2));
+				addition(maxsize==strcmp1(stackHead->num.digits,stackHead->next->num.digits)>0 ?
+				         stackHead->num.digits :
+				         stackHead->next->num.digits,
+				         strcmp1(stackHead->num.digits,stackHead->next->num.digits)>0 ?
+				         stackHead->num.digits :
+				         stackHead->next->num.digits,
+				         result);
+				clear(pop());
+				clear(pop());
+				tempString=newTempString(&tempSize, &size);
+				push(reverseStr(result));
+				stackHead->num.sign='_';
+				continue;
+			}
+			else if (((stackHead->num.sign=='_')&&(stackHead->next->num.sign==''))
+			         ||((stackHead->num.sign=='')&&(stackHead->next->num.sign=='_'))){
+					//If Just one of them is negative and the second is positive
+					if (strcmp1(stackHead->num.digits, stackHead->num.digits)>=0){
+						//If first is bigger or equal to second
+						size_t maxsize=MAX(strlen(stackHead->num.digits), strlen(stackHead->next->num.digits));
+						result=(char *)malloc(sizeof(char)*(maxsize+2));
+						addition(maxsize==strcmp1(stackHead->num.digits,stackHead->next->num.digits)>0 ?
+						         stackHead->num.digits :
+						         stackHead->next->num.digits,
+						         strcmp1(stackHead->num.digits,stackHead->next->num.digits)>0 ?
+						         stackHead->num.digits :
+						         stackHead->next->num.digits,
+						         result);
+						clear(pop());
+						clear(pop());
+						tempString=newTempString(&tempSize, &size);
+						push(reverseStr(result));
+					}
+					else{
+						//Second is bigger than first
+						size_t maxsize=MAX(strlen(stackHead->num.digits), strlen(stackHead->next->num.digits));
+						result=(char *)malloc(sizeof(char)*(maxsize+2));
+						addition(maxsize==strcmp1(stackHead->num.digits,stackHead->next->num.digits)>0 ?
+						         stackHead->num.digits :
+						         stackHead->next->num.digits,
+						         strcmp1(stackHead->num.digits,stackHead->next->num.digits)>0 ?
+						         stackHead->num.digits :
+						         stackHead->next->num.digits,
+						         result);
+						clear(pop());
+						clear(pop());
+						tempString=newTempString(&tempSize, &size);
+						push(reverseStr(result));
+						stackHead->num.sign='_';
+					}
+				}
+				else{
+					size_t maxsize=MAX(strlen(stackHead->num.digits), strlen(stackHead->next->num.digits));
+					result=(char *)malloc(sizeof(char)*(maxsize+2));
+					addition(maxsize==strcmp1(stackHead->num.digits,stackHead->next->num.digits)>0 ?
+					         stackHead->num.digits :
+					         stackHead->next->num.digits,
+					         strcmp1(stackHead->num.digits,stackHead->next->num.digits)>0 ?
+					         stackHead->num.digits :
+					         stackHead->next->num.digits,
+					         result);
+					clear(pop());
+					clear(pop());
+					tempString=newTempString(&tempSize, &size);
+					push(reverseStr(result));
+				}
 		}
 		if (strcmp1(tempString, "-")==0 && stackHead && stackHead->next)
 		{
@@ -333,23 +390,50 @@ int main()
 			tempString=newTempString(&tempSize, &size);
 			continue;
 		}
+		
 		if (strcmp1(tempString, "*")==0 && stackHead && stackHead->next)
 		{
-//			multipliaction();
-			size_t maxsize=MAX(strlen(stackHead->num.digits), strlen(stackHead->next->num.digits));
+			if (((stackHead->num.sign=='_')&&(stackHead->next->num.sign=='_'))||
+					((stackHead->num.sign=='')&&(stackHead->next->num.sign=='')))
+			{
+				//if Both of them are negative or both of them are positive
+//				multiplication();
+				size_t maxsize=MAX(strlen(stackHead->num.digits), strlen(stackHead->next->num.digits));
+				
+				char *res=multiC(maxsize==strlen(stackHead->num.digits) ?
+				                 stackHead->num.digits :
+				                 stackHead->next->num.digits,
+				                 maxsize!=strlen(stackHead->num.digits) ?
+				                 stackHead->num.digits :
+				                 stackHead->next->num.digits);
+				clear(pop());
+				clear(pop());
+				tempString=newTempString(&tempSize, &size);
+				push(res);
+				continue;
+			}
+			else
+			{
+				//One of them is negative anf the second is positive
+				size_t maxsize=MAX(strlen(stackHead->num.digits), strlen(stackHead->next->num.digits));
+				
+				char *res=multiC(maxsize==strlen(stackHead->num.digits) ?
+				                 stackHead->num.digits :
+				                 stackHead->next->num.digits,
+				                 maxsize!=strlen(stackHead->num.digits) ?
+				                 stackHead->num.digits :
+				                 stackHead->next->num.digits);
+				clear(pop());
+				clear(pop());
+				tempString=newTempString(&tempSize, &size);
+				push(res);
+				stackHead->num.sign='_';
+				continue;
 			
-			char *res=multiC(maxsize==strlen(stackHead->num.digits) ?
-			                 stackHead->num.digits :
-			                 stackHead->next->num.digits,
-			                 maxsize!=strlen(stackHead->num.digits) ?
-			                 stackHead->num.digits :
-			                 stackHead->next->num.digits);
-			clear(pop());
-			clear(pop());
-			tempString=newTempString(&tempSize, &size);
-			push(res);
-			continue;
+			}
+			
 		}
+		
 		if (strcmp1(tempString, "/")==0 && stackHead && stackHead->next)
 		{
 //			division();
