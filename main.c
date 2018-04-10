@@ -318,7 +318,6 @@ int main()
 		}
 		if (strcmp1(tempString, "-")==0 && stackHead && stackHead->next)
 		{
-		{
 			//substraction();
 //			size_t maxsize=MAX(strlen(stackHead->num.digits), strlen(stackHead->next->num.digits));
 			result=(char *)malloc(sizeof(char)*(MAX(strlen(stackHead->num.digits), strlen(stackHead->next->num.digits))+1));
