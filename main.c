@@ -438,10 +438,14 @@ int main()
 		{
 //			division();
 			char *res=divC(stackHead->next->num.digits, stackHead->num.digits);
+			const char sign=(const char)(stackHead->next->num.sign!=stackHead->num.sign ?
+			                             '-' :
+			                             '\0');
 			clear(pop());
 			clear(pop());
 			tempString=newTempString(&tempSize, &size);
 			push(res);
+			stackHead->num.sign=sign;
 			continue;
 		}
 		if (strcmp1(tempString, "p")==0)
