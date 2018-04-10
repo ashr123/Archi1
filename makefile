@@ -1,5 +1,5 @@
-all: clean main.o add.o sub.o mult.o div.o divBy2.o
-	gcc -g -Wall -o calc main.o add.o sub.o mult.o div.o divBy2.o
+all: clean main.o add.o sub.o divBy2.o
+	gcc -g -Wall -o calc main.o add.o sub.o divBy2.o
 	rm -f *.o
 
 main.o:
@@ -10,12 +10,6 @@ add.o:
 
 sub.o:
 	nasm -g -f elf64 -w+all -o sub.o sub.s
-
-mult.o:
-	nasm -g -f elf64 -w+all -o mult.o mult.s
-
-div.o:
-	nasm -g -f elf64 -w+all -o div.o div.s
 
 divBy2.o:
 	nasm -g -f elf64 -w+all -o divBy2.o divBy2.s

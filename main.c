@@ -20,17 +20,14 @@ extern void addition(char *, char *, char *);
 
 extern void substraction(char *, char *, char *);
 
-extern void multipliaction(char *, char *, char *);
-
-extern void division(char *, char *, char *);
-
 extern void divisionBy2(char *);
 
 int strcmp1(const char * __s1, const char * __s2)
 {
-	if (strlen(__s1)<strlen(__s2))
+	const size_t len1=strlen(__s1), len2=strlen(__s2);
+	if (len1<len2)
 		return -1;
-	if (strlen(__s1)==strlen(__s2))
+	if (len1==len2)
 		return strcmp(__s1, __s2);
 	return 1;
 }
@@ -267,17 +264,55 @@ int main()
 			//substraction();
 //			size_t maxsize=MAX(strlen(stackHead->num.digits), strlen(stackHead->next->num.digits));
 			result=(char *)malloc(sizeof(char)*(MAX(strlen(stackHead->num.digits), strlen(stackHead->next->num.digits))+1));
-			substraction(strcmp1(stackHead->num.digits, stackHead->next->num.digits)>0 ?
-			             stackHead->num.digits :
-			             stackHead->next->num.digits,
-			             strcmp1(stackHead->num.digits, stackHead->next->num.digits)<=0 ?
-			             stackHead->num.digits :
-			             stackHead->next->num.digits,
-			             result);
-			clear(pop());
-			clear(pop());
+			if (!stackHead->num.sign && stackHead->next->num.sign)
+			{
+				addition(strcmp1(stackHead->num.digits, stackHead->next->num.digits)>0 ?
+				         stackHead->num.digits :
+				         stackHead->next->num.digits,
+				         strcmp1(stackHead->num.digits, stackHead->next->num.digits)<=0 ?
+				         stackHead->num.digits :
+				         stackHead->next->num.digits,
+				         result);
+				clear(pop());
+				clear(pop());
+				push(reverseStr(result));
+			}
+			else
+				if (stackHead->num.sign && !stackHead->next->num.sign)
+				{
+					addition(strcmp1(stackHead->num.digits, stackHead->next->num.digits)>0 ?
+					         stackHead->num.digits :
+					         stackHead->next->num.digits,
+					         strcmp1(stackHead->num.digits, stackHead->next->num.digits)<=0 ?
+					         stackHead->num.digits :
+					         stackHead->next->num.digits,
+					         result);
+					clear(pop());
+					clear(pop());
+					push(reverseStr(result));
+					stackHead->num.sign='_';
+				}
+				else
+					if (stackHead->num.sign && stackHead->next->num.sign)
+					{
+						substraction(strcmp1(stackHead->num.digits, stackHead->next->num.digits)>0 ?
+						             stackHead->num.digits :
+						             stackHead->next->num.digits,
+						             strcmp1(stackHead->num.digits, stackHead->next->num.digits)<=0 ?
+						             stackHead->num.digits :
+						             stackHead->next->num.digits,
+						             result);
+						const char sign=(const char)(strcmp1(stackHead->next->num.digits,
+						                                     stackHead->num.digits)>0 ?
+						                             '_' :
+						                             '\0');
+						clear(pop());
+						clear(pop());
+						push(reverseStr(trim0(result)));
+						stackHead->num.sign=sign;
+					}
+			
 			tempString=newTempString(&tempSize, &size);
-			push(reverseStr(trim0(result)));
 			continue;
 		}
 		if (strcmp1(tempString, "*")==0 && stackHead && stackHead->next)
