@@ -327,7 +327,7 @@ int main()
 //			size_t maxsize=MAX(strlen(stackHead->num.digits), strlen(stackHead->next->num.digits));
 			result=(char *)malloc(
 					sizeof(char)*(MAX(strlen(stackHead->num.digits), strlen(stackHead->next->num.digits))+1));
-			if (!stackHead->num.sign && stackHead->next->num.sign)
+			if (stackHead->num.sign && !stackHead->next->num.sign)
 			{
 				addition(strcmp1(stackHead->num.digits, stackHead->next->num.digits)>0 ?
 				         stackHead->num.digits :
@@ -341,7 +341,7 @@ int main()
 				push(reverseStr(result));
 			}
 			else
-				if (stackHead->num.sign && !stackHead->next->num.sign)
+				if (!stackHead->num.sign && stackHead->next->num.sign)
 				{
 					addition(strcmp1(stackHead->num.digits, stackHead->next->num.digits)>0 ?
 					         stackHead->num.digits :
@@ -356,7 +356,7 @@ int main()
 					stackHead->num.sign='-';
 				}
 				else
-					if (stackHead->num.sign && stackHead->next->num.sign)
+					if (!stackHead->num.sign && stackHead->next->num.sign)
 					{
 						substraction(strcmp1(stackHead->num.digits, stackHead->next->num.digits)>0 ?
 						             stackHead->num.digits :
@@ -365,14 +365,10 @@ int main()
 						             stackHead->num.digits :
 						             stackHead->next->num.digits,
 						             result);
-						const char sign=(const char)(strcmp1(stackHead->next->num.digits,
-						                                     stackHead->num.digits)>0 ?
-						                             '-' :
-						                             '\0');
 						clear(pop());
 						clear(pop());
 						push(reverseStr(trim0(result)));
-						stackHead->num.sign=sign;
+						stackHead->num.sign='-';
 					}
 					else
 					{
@@ -384,8 +380,8 @@ int main()
 						             stackHead->next->num.digits,
 						             result);
 						const char sign=(const char)(strcmp1(stackHead->next->num.digits,
-						                                     stackHead->num.digits)<0 ?
-						                             '_' :
+						                                     stackHead->num.digits)>0 ?
+						                             '-' :
 						                             '\0');
 						clear(pop());
 						clear(pop());
