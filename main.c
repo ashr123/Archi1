@@ -260,12 +260,12 @@ int main()
 				clear(pop());
 				tempString=newTempString(&tempSize, &size);
 				push(reverseStr(result));
-				stackHead->num.sign='_';
+				stackHead->num.sign='-';
 				continue;
 			}
 			else
-				if (((stackHead->num.sign=='_') && (stackHead->next->num.sign=='\0'))
-				    || ((stackHead->num.sign=='\0') && (stackHead->next->num.sign=='_')))
+				if (((stackHead->num.sign=='-') && (stackHead->next->num.sign=='\0'))
+				    || ((stackHead->num.sign=='\0') && (stackHead->next->num.sign=='-')))
 				{
 					//If Just one of them is negative and the second is positive
 					if (strcmp1(stackHead->num.digits, stackHead->num.digits)>=0)
@@ -301,7 +301,7 @@ int main()
 						clear(pop());
 						tempString=newTempString(&tempSize, &size);
 						push(reverseStr(result));
-						stackHead->num.sign='_';
+						stackHead->num.sign='-';
 					}
 				}
 				else
@@ -399,7 +399,7 @@ int main()
 		
 		if (strcmp1(tempString, "*")==0 && stackHead && stackHead->next)
 		{
-			if (((stackHead->num.sign=='_') && (stackHead->next->num.sign=='_')) ||
+			if (((stackHead->num.sign=='-') && (stackHead->next->num.sign=='-')) ||
 			    ((stackHead->num.sign=='\0') && (stackHead->next->num.sign=='\0')))
 			{
 				//if Both of them are negative or both of them are positive
@@ -433,7 +433,7 @@ int main()
 				clear(pop());
 				tempString=newTempString(&tempSize, &size);
 				push(res);
-				stackHead->num.sign='_';
+				stackHead->num.sign='-';
 				continue;
 				
 			}
