@@ -477,7 +477,7 @@ int main()
 			tempString=newTempString(&tempSize, &size);
 			continue;
 		}
-		if (ch=='\n')
+		if (ch<'!')
 		{
 			if (strcmp(tempString, "!")<0)
 			{
