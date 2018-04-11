@@ -14,7 +14,7 @@ typedef struct Link
 	struct Link *next;
 } LinkedList;
 
-LinkedList *stackHead=NULL;
+static LinkedList *stackHead=NULL;
 
 extern void addition(char *, char *, char *);
 
@@ -22,7 +22,7 @@ extern void substraction(char *, char *, char *);
 
 extern void divisionBy2(char *);
 
-int strcmp1(const char *__s1, const char *__s2)
+static int strcmp1(const char *__s1, const char *__s2)
 {
 	const size_t len1=strlen(__s1), len2=strlen(__s2);
 	if (len1<len2)
@@ -32,7 +32,7 @@ int strcmp1(const char *__s1, const char *__s2)
 	return 1;
 }
 
-void checkMalloc(void *toCheck)
+static void checkMalloc(void *toCheck)
 {
 	if (!toCheck)
 	{
@@ -41,12 +41,12 @@ void checkMalloc(void *toCheck)
 	}
 }
 
-size_t MAX(size_t a, size_t b)
+static size_t MAX(size_t a, size_t b)
 {
 	return a>b ? a : b;
 }
 
-char *reverseStr(char *str)
+static char *reverseStr(char *str)
 {
 	size_t n=strlen(str);
 	
@@ -61,14 +61,14 @@ char *reverseStr(char *str)
 	return str;
 }
 
-char *trim0(char *str)
+static char *trim0(char *str)
 {
 	while (strlen(str)!=0 && str[strlen(str)-1]=='0')
 		str[strlen(str)-1]='\0';
 	return str;
 }
 
-char *multiC(char *c1, char *c2)
+static char *multiC(char *c1, char *c2)
 {
 	char *sum=malloc(sizeof(char)*2);
 	checkMalloc(sum);
@@ -101,7 +101,7 @@ char *multiC(char *c1, char *c2)
 	}
 }
 
-void divCHepler(char *first, char *second, char *result, char *factor)
+static void divCHepler(char *first, char *second, char *result, char *factor)
 {
 	if (strcmp1(first, second)<0)
 	{
@@ -148,7 +148,7 @@ void divCHepler(char *first, char *second, char *result, char *factor)
 	free(factor);
 }
 
-char *divC(char *first, char *second)
+static char *divC(char *first, char *second)
 {
 	char *result=(char *)malloc(sizeof(char)*(strlen(first)+1));
 	checkMalloc(result);
@@ -175,7 +175,7 @@ char *divC(char *first, char *second)
 	return result;
 }
 
-char *increase(char *string, size_t *size)
+static char *increase(char *string, size_t *size)
 {
 	char *temp=(char *)malloc((*size+=10)*sizeof(char));
 	checkMalloc(temp);
@@ -186,16 +186,17 @@ char *increase(char *string, size_t *size)
 	return temp;
 }
 
-void clear(LinkedList *stackHead)
+static void clear(LinkedList *stackHead)
 {
 	if (!stackHead)
 		return;
 	clear(stackHead->next);
-	free(stackHead->num.digits);
+	if (!stackHead->num.digits)
+		free(stackHead->num.digits);
 	free(stackHead);
 }
 
-LinkedList *pop()
+static LinkedList *pop()
 {
 	LinkedList *out=stackHead;
 	stackHead=stackHead->next;
@@ -203,7 +204,7 @@ LinkedList *pop()
 	return out;
 }
 
-void push(char *tempString)
+static void push(char *tempString)
 {
 	LinkedList *tempLink=(LinkedList *)malloc(sizeof(LinkedList));
 	checkMalloc(tempLink);
@@ -218,7 +219,7 @@ void push(char *tempString)
 	stackHead=tempLink;
 }
 
-char *newTempString(long *tempSize, size_t *size)
+static char *newTempString(long *tempSize, size_t *size)
 {
 	char *temp=(char *)malloc(sizeof(char)*10);
 	checkMalloc(temp);
@@ -231,6 +232,7 @@ char *newTempString(long *tempSize, size_t *size)
 
 int main()
 {
+//	int i=0;
 	char ch;
 	size_t size=10;
 	long tempSize=0;
@@ -238,17 +240,20 @@ int main()
 	checkMalloc(tempString);
 	while (EOF!=(ch=(char)fgetc(stdin)))
 	{
+//		i++;
+//		printf("%d\n",i);
 		tempString[tempSize++]=ch;
 		if (tempSize==size)
 			tempString=increase(tempString, &size);
 		if (strcmp1(tempString, "+")==0 && stackHead && stackHead->next)
 		{
-			if ((stackHead->num.sign=='_') && (stackHead->next->num.sign=='_'))
+			if ((stackHead->num.sign=='-') && (stackHead->next->num.sign=='-'))
 				//If first is negative and second is negative
 			{
 				//Addition();
 				size_t maxsize=MAX(strlen(stackHead->num.digits), strlen(stackHead->next->num.digits));
 				result=(char *)malloc(sizeof(char)*(maxsize+2));
+				checkMalloc(result);
 				addition(strcmp1(stackHead->num.digits, stackHead->next->num.digits)>0 ?
 				         stackHead->num.digits :
 				         stackHead->next->num.digits,
@@ -268,46 +273,34 @@ int main()
 				    || ((stackHead->num.sign=='\0') && (stackHead->next->num.sign=='-')))
 				{
 					//If Just one of them is negative and the second is positive
-					if (strcmp1(stackHead->num.digits, stackHead->num.digits)>=0)
-					{
-						//If first is bigger or equal to second
-						size_t maxsize=MAX(strlen(stackHead->num.digits), strlen(stackHead->next->num.digits));
-						result=(char *)malloc(sizeof(char)*(maxsize+2));
-						addition(strcmp1(stackHead->num.digits, stackHead->next->num.digits)>0 ?
-						         stackHead->num.digits :
-						         stackHead->next->num.digits,
-						         strcmp1(stackHead->num.digits, stackHead->next->num.digits)<=0 ?
-						         stackHead->num.digits :
-						         stackHead->next->num.digits,
-						         result);
-						clear(pop());
-						clear(pop());
-						tempString=newTempString(&tempSize, &size);
-						push(reverseStr(result));
-					}
-					else
-					{
-						//Second is bigger than first
-						size_t maxsize=MAX(strlen(stackHead->num.digits), strlen(stackHead->next->num.digits));
-						result=(char *)malloc(sizeof(char)*(maxsize+2));
-						addition(strcmp1(stackHead->num.digits, stackHead->next->num.digits)>0 ?
-						         stackHead->num.digits :
-						         stackHead->next->num.digits,
-						         strcmp1(stackHead->num.digits, stackHead->next->num.digits)<=0 ?
-						         stackHead->num.digits :
-						         stackHead->next->num.digits,
-						         result);
-						clear(pop());
-						clear(pop());
-						tempString=newTempString(&tempSize, &size);
-						push(reverseStr(result));
-						stackHead->num.sign='-';
-					}
+					//If first is bigger or equal to second
+					size_t maxsize=MAX(strlen(stackHead->num.digits), strlen(stackHead->next->num.digits));
+					result=(char *)malloc(sizeof(char)*(maxsize+2));
+					checkMalloc(result);
+					substraction(strcmp1(stackHead->num.digits, stackHead->next->num.digits)>0 ?
+					             stackHead->num.digits :
+					             stackHead->next->num.digits,
+					             strcmp1(stackHead->num.digits, stackHead->next->num.digits)<=0 ?
+					             stackHead->num.digits :
+					             stackHead->next->num.digits,
+					             result);
+					const char sign=(const char)((strcmp1(stackHead->next->num.digits, stackHead->num.digits)>0 &&
+					                              stackHead->next->num.sign) ||
+					                             (strcmp1(stackHead->next->num.digits, stackHead->num.digits)<0 &&
+					                              stackHead->num.sign) ?
+					                             '-' :
+					                             '\0');
+					clear(pop());
+					clear(pop());
+					tempString=newTempString(&tempSize, &size);
+					push(reverseStr(trim0(result)));
+					stackHead->num.sign=sign;
 				}
 				else
 				{
 					size_t maxsize=MAX(strlen(stackHead->num.digits), strlen(stackHead->next->num.digits));
 					result=(char *)malloc(sizeof(char)*(maxsize+2));
+					checkMalloc(result);
 					addition(strcmp1(stackHead->num.digits, stackHead->next->num.digits)>0 ?
 					         stackHead->num.digits :
 					         stackHead->next->num.digits,
@@ -318,7 +311,7 @@ int main()
 					clear(pop());
 					clear(pop());
 					tempString=newTempString(&tempSize, &size);
-					push(reverseStr(result));
+					push(reverseStr(trim0(result)));
 				}
 		}
 		if (strcmp1(tempString, "-")==0 && stackHead && stackHead->next)
@@ -327,6 +320,7 @@ int main()
 //			size_t maxsize=MAX(strlen(stackHead->num.digits), strlen(stackHead->next->num.digits));
 			result=(char *)malloc(
 					sizeof(char)*(MAX(strlen(stackHead->num.digits), strlen(stackHead->next->num.digits))+1));
+			checkMalloc(result);
 			if (stackHead->num.sign && !stackHead->next->num.sign)
 			{
 				addition(strcmp1(stackHead->num.digits, stackHead->next->num.digits)>0 ?
@@ -400,14 +394,18 @@ int main()
 			{
 				//if Both of them are negative or both of them are positive
 //				multiplication();
-				size_t maxsize=MAX(strlen(stackHead->num.digits), strlen(stackHead->next->num.digits));
 				
-				char *res=multiC(maxsize==strlen(stackHead->num.digits) ?
+				char *res=multiC(strcmp1(stackHead->num.digits, stackHead->next->num.digits)>0 ?
 				                 stackHead->num.digits :
 				                 stackHead->next->num.digits,
-				                 maxsize!=strlen(stackHead->num.digits) ?
+				                 strcmp1(stackHead->num.digits, stackHead->next->num.digits)<=0 ?
 				                 stackHead->num.digits :
 				                 stackHead->next->num.digits);
+//				char *res2=(char *)malloc(sizeof(char)*(strlen(res)+1));
+//				checkMalloc(res2);
+//				strcpy(res2, res);
+//				free(res);
+				stackHead->num.digits=stackHead->next->num.digits=NULL;
 				clear(pop());
 				clear(pop());
 				tempString=newTempString(&tempSize, &size);
@@ -417,14 +415,14 @@ int main()
 			else
 			{
 				//One of them is negative anf the second is positive
-				size_t maxsize=MAX(strlen(stackHead->num.digits), strlen(stackHead->next->num.digits));
 				
-				char *res=multiC(maxsize==strlen(stackHead->num.digits) ?
+				char *res=multiC(strcmp1(stackHead->num.digits, stackHead->next->num.digits)>0 ?
 				                 stackHead->num.digits :
 				                 stackHead->next->num.digits,
-				                 maxsize!=strlen(stackHead->num.digits) ?
+				                 strcmp1(stackHead->num.digits, stackHead->next->num.digits)<=0 ?
 				                 stackHead->num.digits :
 				                 stackHead->next->num.digits);
+				stackHead->num.digits=stackHead->next->num.digits=NULL;
 				clear(pop());
 				clear(pop());
 				tempString=newTempString(&tempSize, &size);
@@ -452,7 +450,6 @@ int main()
 		{
 			stackHead ? printf("%c%s\n", stackHead->num.sign, stackHead->num.digits) :
 			puts("calc: stack empty");
-//			puts(stackHead ? stackHead->num.digits : "calc: stack empty");
 			tempString=newTempString(&tempSize, &size);
 			continue;
 		}
