@@ -150,7 +150,7 @@ static void divCHepler(char *first, char *second, char *result, char *factor)
 
 static char *divC(char *first, char *second)
 {
-	if (strcmp(second, "0")==0 || strcmp(first, "0")==0)
+	if (strcmp(second, "0")==0)
 	{
 		puts("calc: divide by zero");
 		return NULL;
@@ -158,6 +158,8 @@ static char *divC(char *first, char *second)
 	char *result=(char *)malloc(sizeof(char)*(strlen(first)+1));
 	checkMalloc(result);
 	sprintf(result, "0");
+	if (strcmp1(first, second)<0)
+		return result;
 	char *factor=(char *)malloc(sizeof(char)*2);
 	checkMalloc(factor);
 	sprintf(factor, "1");
@@ -444,7 +446,7 @@ int main()
 		{
 //			division();
 			char *res=divC(stackHead->next->num.digits, stackHead->num.digits);
-			if (!stackHead->num.digits)
+			if (res)
 			{
 				const char sign=(const char)(stackHead->next->num.sign!=stackHead->num.sign ? '-' : '\0');
 				stackHead->num.digits=stackHead->next->num.digits=NULL;
@@ -485,12 +487,7 @@ int main()
 			}
 			tempString[tempSize-1]='\0';
 			push(tempString);
-//			LinkedList *tempLink=(LinkedList *)malloc(sizeof(LinkedList));
-//			checkMalloc(tempLink);
-//			tempLink->num.digits=tempString;
 			tempString=newTempString(&tempSize, &size);
-//			tempLink->next=stackHead;
-//			stackHead=tempLink;
 			continue;
 		}
 		//puts("calc: stack empty");
