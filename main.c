@@ -63,7 +63,7 @@ static char *reverseStr(char *str)
 
 static char *trim0(char *str)
 {
-	while (strlen(str)!=0 && str[strlen(str)-1]=='0')
+	while (strlen(str)!=1 && str[strlen(str)-1]=='0')
 		str[strlen(str)-1]='\0';
 	return str;
 }
@@ -150,6 +150,11 @@ static void divCHepler(char *first, char *second, char *result, char *factor)
 
 static char *divC(char *first, char *second)
 {
+	if (strcmp(second, "0")==0 || strcmp(first, "0")==0)
+	{
+		puts("calc: divide by zero");
+		return NULL;
+	}
 	char *result=(char *)malloc(sizeof(char)*(strlen(first)+1));
 	checkMalloc(result);
 	sprintf(result, "0");
@@ -206,6 +211,7 @@ static LinkedList *pop()
 
 static void push(char *tempString)
 {
+	reverseStr(trim0(reverseStr(tempString)));
 	LinkedList *tempLink=(LinkedList *)malloc(sizeof(LinkedList));
 	checkMalloc(tempLink);
 	tempLink->num.digits=tempString;
@@ -213,7 +219,9 @@ static void push(char *tempString)
 	if (tempString[0]=='_')
 	{
 		strcpy(tempString, tempString+1);
-		tempLink->num.sign='-';
+		reverseStr(trim0(reverseStr(tempString)));
+		if (tempString[0]!='0')
+			tempLink->num.sign='-';
 	}
 	tempLink->next=stackHead;
 	stackHead=tempLink;
@@ -436,14 +444,16 @@ int main()
 		{
 //			division();
 			char *res=divC(stackHead->next->num.digits, stackHead->num.digits);
-			const char sign=(const char)(stackHead->next->num.sign!=stackHead->num.sign ?
-			                             '-' :
-			                             '\0');
-			clear(pop());
-			clear(pop());
+			if (!stackHead->num.digits)
+			{
+				const char sign=(const char)(stackHead->next->num.sign!=stackHead->num.sign ? '-' : '\0');
+				stackHead->num.digits=stackHead->next->num.digits=NULL;
+				clear(pop());
+				clear(pop());
+				push(res);
+				stackHead->num.sign=sign;
+			}
 			tempString=newTempString(&tempSize, &size);
-			push(res);
-			stackHead->num.sign=sign;
 			continue;
 		}
 		if (strcmp1(tempString, "p")==0)
