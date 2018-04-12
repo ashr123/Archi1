@@ -32,7 +32,7 @@ static int strcmp1(const char *__s1, const char *__s2)
 	return 1;
 }
 
-static void checkMalloc(void *toCheck)
+static void checkMalloc(const void *toCheck)
 {
 	if (!toCheck)
 	{
@@ -41,20 +41,20 @@ static void checkMalloc(void *toCheck)
 	}
 }
 
-static size_t MAX(size_t a, size_t b)
+static size_t MAX(const size_t a, const size_t b)
 {
 	return a>b ? a : b;
 }
 
 static char *reverseStr(char *str)
 {
-	size_t n=strlen(str);
+	const size_t n=strlen(str);
 	
 	// Swap character starting from two
 	// corners
 	for (int i=0; i<n/2; i++)
 	{
-		char temp=str[i];
+		const char temp=str[i];
 		str[i]=str[n-i-1];
 		str[n-i-1]=temp;
 	}
@@ -72,8 +72,9 @@ static char *multiC(char *c1, char *c2)
 {
 	char *sum=malloc(sizeof(char)*2);
 	checkMalloc(sum);
-	sum[0]='0';
-	sum[1]='\0';
+	sprintf(sum, "0");
+//	sum[0]='0';
+//	sum[1]='\0';
 	while (1)
 	{
 		char firstDigit=c1[strlen(c1)-1];
@@ -383,8 +384,7 @@ int main()
 						             stackHead->num.digits :
 						             stackHead->next->num.digits,
 						             result);
-						const char sign=(const char)(strcmp1(stackHead->next->num.digits,
-						                                     stackHead->num.digits)>0 ?
+						const char sign=(const char)(strcmp1(stackHead->next->num.digits, stackHead->num.digits)>0 ?
 						                             '-' :
 						                             '\0');
 						clear(pop());
